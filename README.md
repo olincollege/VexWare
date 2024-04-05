@@ -1,3 +1,4 @@
-# C Project Repository Template
+# VexWare
 
-A template repository for a C project.
+Software Systems Final Project
+Andrew Phillips, AJ Evans, Kate McCurley
