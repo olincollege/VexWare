@@ -66,12 +66,12 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
     WNDCLASSEX mc;
     HWND hwnd;
     MSG Msg;
-    HICON icon = (HICON)LoadImageA(NULL, "./pink.ico", IMAGE_ICON, 128, 128, LR_LOADFROMFILE);
-    if (!icon) {
-        MessageBox(NULL, "Couldn't load our icon!", "Oh no!",
-            MB_ICONEXCLAMATION | MB_OK);
-        return 0;
-    }
+    // HICON icon = (HICON)LoadImageA(NULL, "./pink.ico", IMAGE_ICON, 128, 128, LR_LOADFROMFILE);
+    // if (!icon) {
+    //     MessageBox(NULL, "Couldn't load our icon!", "Oh no!",
+    //         MB_ICONEXCLAMATION | MB_OK);
+    //     return 0;
+    // }
     // register the main class
     mc.cbSize        = sizeof(WNDCLASSEX);
     mc.style         = 0;
@@ -80,12 +80,12 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
     mc.cbWndExtra    = 0;
     mc.hInstance     = hInstance;
 
-    mc.hIcon         = icon;
+    mc.hIcon         = LoadIcon(NULL, IDI_APPLICATION);
     mc.hCursor       = LoadCursor(NULL, IDC_ARROW);
     mc.hbrBackground = (HBRUSH)(COLOR_WINDOW+1);
     mc.lpszMenuName  = NULL;
     mc.lpszClassName = g_szClassName;
-    mc.hIconSm       = icon;
+    mc.hIconSm       = LoadIcon(NULL, IDI_APPLICATION);
 
     if(!RegisterClassEx(&mc))
     {
