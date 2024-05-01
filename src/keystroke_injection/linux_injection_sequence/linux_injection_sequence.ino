@@ -1,6 +1,6 @@
 /* 
 Linux injection sequence
-Commands to open terminal, download a file from Github, and run the file
+Injects commands to open a terminal, download a file from Github, and run the file
 
 Keystroke sequence:
 - Open terminal
