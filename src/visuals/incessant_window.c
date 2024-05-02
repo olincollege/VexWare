@@ -12,10 +12,77 @@ int ynDialog(LPCSTR str_msg) {
     MB_ICONSTOP | MB_YESNO | MB_SYSTEMMODAL);
 }
 int storyDialog(LPCSTR str_msg) {
+    return MessageBox(NULL, str_msg, "Story Dialog",
+    MB_ICONSTOP | MB_CANCELTRYCONTINUE | MB_SYSTEMMODAL);
     return 0;
 }
-void storyHandler() {
-
+void townEnding() {
+    MessageBox(NULL, "After a long, tiring journey, you stumble into a small town.\nThe townspeople are wary of you at first, but you settle in quickly.\nYou warm up to life in this quaint, little village and forget your delusions of escape.", "Your new happy life",
+    MB_ICONWARNING | MB_OK | MB_SYSTEMMODAL);
+    return;
+}
+void dragonEnding(HWND hwnd) {
+    // the only real way to close this app
+    int ready = MessageBox(NULL, "The dragon lowers its head, allowing you to carefully climb atop its back.\nYou and your new dragon buddy reach the end of the sky and smash through the confining Window.\n[OK] to close window.", "Ending Dialog",
+    MB_ICONWARNING | MB_OK | MB_SYSTEMMODAL);
+    if (ready == IDOK) {
+        DestroyWindow(hwnd);
+    } else {
+        return;
+    }
+}
+void eatenEnding(int style) {
+    switch(style) {
+        case 1:
+            MessageBox(NULL, "The dragon devours you whole.\nThe last thought in your head is of how uncomfortable your wet, slimy clothes feel.", "From the stomach of the beast",
+            MB_ICONWARNING | MB_OK | MB_SYSTEMMODAL);
+            return;
+        case 2:
+            MessageBox(NULL, "You never wake up.\nYou are devoured by wild woodland creatures and your bones are used to fertilize the forest ecosystem.", "Return to nature",
+            MB_ICONWARNING | MB_OK | MB_SYSTEMMODAL);
+            return;
+        default:
+            MessageBox(NULL, "You never wake up.\nYou are devoured by wild woodland creatures and your bones are used to fertilize the forest ecosystem.", "Return to nature",
+            MB_ICONWARNING | MB_OK | MB_SYSTEMMODAL);
+            return;
+    }
+}
+void storyHandler(HWND hwnd) {
+    int first = storyDialog("You stand alone on a narrow path in a densely wooded area.\nTall coniferous trees surround you, limiting your vision to the path ahead and behind you.\n[CANCEL] to turn around and start walking. [CONTINUE] to forge ahead.");
+    switch(first) {
+        case IDCANCEL:
+            townEnding();
+            return;
+        case IDTRYAGAIN:
+            int leave = ynDialog("What a baby. Do you still want to keep trying to quit?");
+            if (leave == IDYES) {
+                MessageBox(NULL, "Haha.\nAfter that outburst, I'm not surprised. Still, too bad.", "You're staying here.",
+                MB_ICONWARNING | MB_OK | MB_SYSTEMMODAL);
+            } else {
+                happyDialog();
+            }
+            return;
+        case IDCONTINUE:
+            int second = storyDialog("After walking for hours, the sun hangs low in the sky at your back.\nLong shadows stretch their dark grasping fingers towards the mouth of an ominous crack in the approaching cliff side.\n[CANCEL] to attempt to set up a camp to pass the long night. [TRY AGAIN] to turn around and try your luck in the opposite direction.[CONTINUE] to dash caution to the wind and venture into the crevice.");
+            switch(second) {
+                case IDCANCEL:
+                    int ending = 2;
+                    eatenEnding(ending);
+                    return;
+                case IDTRYAGAIN:
+                    townEnding();
+                    return;
+                case IDCONTINUE:
+                    int joker = ynDialog("Within the crevice, a mighty dragon rests, curled into a scaly pile.\nUpon your intrusion, It awakens.\n'You have disturbed my rest, Human. The price for your rudeness is to entertain me.'\n[YES] to tell it your best joke. [NO] to apologize and back out of the cave.");
+                    if (joker == IDYES) {
+                        dragonEnding(hwnd);
+                    } else {
+                        int ending = 1;
+                        eatenEnding(ending);
+                        return;
+                    }
+            }
+    }
     return;
 }
 LRESULT CALLBACK WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
@@ -36,7 +103,7 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
                     if (third == IDYES) {
                         int threat = ynDialog("If you quit, I'm dropping you in the woods.\nStill want to quit?");
                         if (threat == IDYES) {
-                            storyHandler();
+                            storyHandler(hwnd);
                         } else {
                             happyDialog();
                         }
