@@ -39,7 +39,7 @@ void loop() {
     if (hasRun == 0) {
     // Begin keystroke sequence
     // Try opening Linux terminal with several popular shortcuts.
-    Keyboard.press(KEY_LEFT_SHIFT);
+    Keyboard.press(KEY_LEFT_CTRL);
     Keyboard.press(KEY_LEFT_ALT);
     Keyboard.press('t');
     Keyboard.releaseAll();
