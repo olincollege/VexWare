@@ -1,9 +1,5 @@
 /* 
-TODOs:
-- rewrite download string to only include the URL
-- double check UAC prompting
-
-Windows injection sequence
+Windows Injection Sequence
 
 Uses an Arduino R4 to emulate an HID keyboard and inject keystroke commands 
 to open a Powershell terminal through the Windows Start menu, download a file from Github, 
@@ -15,7 +11,8 @@ The general overview of the keystroke sequence is shown below:
 - Run file
 
 Inputs:
-download_url: A string containing the URL to a specified file off of GitHub.
+download: A string containing the powershell command to download a specified file off 
+of GitHub.
 file_name: A string containing the name of the downloaded file to run.
 */
 
