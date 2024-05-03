@@ -15,4 +15,10 @@ There isn't any direct way for the Arduino to determine what operating system th
 
 An Arduino UNO R4 is required for HID emulation. The keystroke injection scripts can be downloaded from the `src/keystroke_injection` directory, and the scripts can be flashed to the Arduino using Arduino IDE with the Keyboard library installed. The scripts contain strings that can be replaced with the URL to the raw file to download off of GitHub using a `raw.githubusercontent.com/repository/file_location` format, and the name of the file to run.
 
+### Linux VexWare Attack
 
+The directory linux_scripts contains the source code for the executable that is downloaded and run in the Linux injection. This includes functions for modifying the bash config file and scheduling recurring jobs. The main program is currently set up to run basic, harmless pranks like making the computer speak random phrases aloud and adding silly responses to certain terminal commands; however, they are also set up so the specific changes put in place are easy to modify (for example, one of the functions creates a recurring job that runs whatever executable is given as input, so there is a lot of room for modifying what actions are done).
+
+The injection script currently downloads the compiled version of `main.c` and runs it on the victims computer. To modify the actions being done by the virus, changes can be made to this file. Then, the link in the injection script needs to be updated following the installation directions above.
+
+To undo changes done by this attack, 1. remove any new lines appended to the `~/.bashrc` file (then either start a new instance of bash or source the file) and 2. run `crontab -e` then remove any added lines (these changes will take effect as soon as the file is saved).

