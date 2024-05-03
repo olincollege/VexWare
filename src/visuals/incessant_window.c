@@ -3,35 +3,57 @@
 const char g_szClassName[] = "unendingWindowClass";
 
 void happyDialog() {
+    /**
+     * Creates a messagebox to display text to the user.
+     */
     MessageBox(NULL, "I'm glad you're not leaving!", "Happy Friend Dialog",
     MB_ICONWARNING | MB_OK | MB_SYSTEMMODAL);
     return;
 }
 int ynDialog(LPCSTR str_msg) {
+    /**
+     * Creates a messagebox to display text to the user.
+     * @param str_msg pointer to a const string message to be displayed
+     * @return the user's choice as an integer
+     */
     return MessageBox(NULL, str_msg, "Abandon Friend Dialog",
     MB_ICONSTOP | MB_YESNO | MB_SYSTEMMODAL);
 }
 int storyDialog(LPCSTR str_msg) {
+    /**
+     * Creates a messagebox to display text to the user.
+     * @param str_msg pointer to a const string message to be displayed
+     * @return the user's choice as an integer
+     */
     return MessageBox(NULL, str_msg, "Story Dialog",
     MB_ICONSTOP | MB_CANCELTRYCONTINUE | MB_SYSTEMMODAL);
-    return 0;
 }
 void townEnding() {
+    /**
+     * Creates a messagebox to display text to the user.
+     */
     MessageBox(NULL, "After a long, tiring journey, you stumble into a small town.\nThe townspeople are wary of you at first, but you settle in quickly.\nYou warm up to life in this quaint, little village and forget your delusions of escape.", "Your new happy life",
     MB_ICONWARNING | MB_OK | MB_SYSTEMMODAL);
     return;
 }
 void dragonEnding(HWND hwnd) {
-    // the only real way to close this app
+    /**
+    * Creates a messagebox to display text to the user.
+    * @param hwnd handler for the current window
+    */
     int ready = MessageBox(NULL, "The dragon lowers its head, allowing you to carefully climb atop its back.\nYou and your new dragon buddy reach the end of the sky and smash through the confining Window.\n[OK] to close window.", "Ending Dialog",
     MB_ICONWARNING | MB_OK | MB_SYSTEMMODAL);
     if (ready == IDOK) {
-        DestroyWindow(hwnd);
+        DestroyWindow(hwnd);  // the only real way to close this app
     } else {
         return;
     }
 }
 void eatenEnding(int style) {
+    /**
+     * Creates a messagebox to display story ending text to the user.
+     * @param style an integer that represents which ending should be displayed
+     */
     switch(style) {
         case 1:
             MessageBox(NULL, "The dragon devours you whole.\nThe last thought in your head is of how uncomfortable your wet, slimy clothes feel.", "From the stomach of the beast",
@@ -48,6 +70,11 @@ void eatenEnding(int style) {
     }
 }
 void storyHandler(HWND hwnd) {
+    /**
+     * Creates a set series of choices defined by messageboxes.
+     * Handles user interaction with messagebox elements.
+     * @param hwnd handler for the current window
+     */
     int first = storyDialog("You stand alone on a narrow path in a densely wooded area.\nTall coniferous trees surround you, limiting your vision to the path ahead and behind you.\n[CANCEL] to turn around and start walking. [CONTINUE] to forge ahead.");
     switch(first) {
         case IDCANCEL:
@@ -87,12 +114,14 @@ void storyHandler(HWND hwnd) {
 }
 LRESULT CALLBACK WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
 {
+    /**
+    * Defines the Window Procedure.
+    * Handles messages sent to the window.
+    * @param hwnd handler for the current window
+    * @param msg current message sent to the window
+    */
     switch(msg)
     {
-        // case WM_KILLFOCUS:
-        //     MessageBox(NULL, "Hey! Where are you going?", "Lost Focus Dialog",
-        //     MB_ICONWARNING | MB_OK | MB_SYSTEMMODAL);
-        // break;
         case WM_CLOSE:
             // dont let them close me ;-;
            int first = ynDialog("Do you really want to quit?");
@@ -130,15 +159,17 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
 int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
     LPSTR lpCmdLine, int nCmdShow)
 {
+    /**
+    * Defines the window's class and creates the window.
+    * @param hInstance handle to the executable in memory
+    * @param hPrevInstance artifact from Win16, always NULL
+    * @param lpCmdLine pointer to command line args
+    * @param nCmdShow integer specifying thew window's show state
+    * @return current message in window message queue
+    */
     WNDCLASSEX mc;
     HWND hwnd;
     MSG Msg;
-    // HICON icon = (HICON)LoadImageA(NULL, "./pink.ico", IMAGE_ICON, 128, 128, LR_LOADFROMFILE);
-    // if (!icon) {
-    //     MessageBox(NULL, "Couldn't load our icon!", "Oh no!",
-    //         MB_ICONEXCLAMATION | MB_OK);
-    //     return 0;
-    // }
     // register the main class
     mc.cbSize        = sizeof(WNDCLASSEX);
     mc.style         = 0;
