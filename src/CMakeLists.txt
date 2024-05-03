@@ -8,3 +8,7 @@
 # or similar. The PRIVATE/INTERFACE/PUBLIC keyword will depend on whether the
 # library is used only in function bodies (PRIVATE), only in function
 # signatures/types (INTERFACE), or both (PUBLIC).
+
+add_library(linux_src linux_scripts/linux_src.c)
+add_executable(main linux_scripts/main.c)
+target_link_libraries(main linux_src)

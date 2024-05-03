@@ -3,9 +3,15 @@
 Software Systems Final Project
 Andrew Phillips, AJ Evans, Kate McCurley
 
+### Project Overview
+
+This project explores writing and injecting non-malicious malware from a plugged in USB device. The malware injection method is similar to a USB rubber ducky, injecting keystrokes into the target computer to download and run files from online (currently set up to download executables from this repo). In addition, the USB device injects keystrokes to determine if a computer is running Linux or Windows, and then downloads and runs the appropriate executables to run on the target OS. 
+
+Linux-specific programs run basic, harmless pranks like making the computer speak random phrases aloud and adding silly responses to certain terminal commands; however, they are also set up so the specific changes put in place are easy to modify.
+
 ### Keystroke Injection
 
-This project utilizes an Arduino R4 emulating an HID keyboard and inject keystroke commands. Depending on the target computer's operating system, a different keystroke sequence is injected into the system to open a terminal, download a desired file off of any GitHub repository, and run the downloaded file off on the target computer. The injection is designed so the Arduino does not need to remain connected to the target computer after the file is running on the target system.
+This project utilizes an Arduino UNO R4 emulating an HID keyboard and inject keystroke commands. Depending on the target computer's operating system, a different keystroke sequence is injected into the system to open a terminal, download a desired file off of any GitHub repository, and run the downloaded file off on the target computer. The injection is designed so the Arduino does not need to remain connected to the target computer after the file is running on the target system.
 
 ### OS Recognition
 
