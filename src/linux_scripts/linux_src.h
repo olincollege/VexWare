@@ -1,3 +1,11 @@
+#include <pwd.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <sys/types.h>
+#include <sys/wait.h>
+#include <unistd.h>
+
 /**
  * Get the file path of the home directory
  *
@@ -20,7 +28,7 @@ void make_exec(char* file);
  * @param url the url to download the file from
  * @param need_exec boolean to tell if the file should be granted exec perms
  */
-void download_file(char* home_loc, char* file_path, char* url, int need_exec);
+void download_file(char* home_loc, char* file_path, int need_exec, char* url);
 
 /**
  * Append to the user's bash config file

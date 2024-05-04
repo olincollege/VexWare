@@ -7,7 +7,6 @@
 #include <sys/types.h>
 #include <sys/wait.h>
 #include <unistd.h>
-#include <sstream>
 
 char* get_home() {
   char* fileloc;
@@ -29,7 +28,7 @@ void make_exec(char* file) {
   }
 }
 
-void download_file(char* home_loc, char* file_path, char* url, int need_exec) {
+void download_file(char* home_loc, char* file_path, int need_exec, char* url) {
   size_t path_len = strlen(home_loc) + strlen(file_path) + 2;
   char download_loc[path_len];
 
@@ -91,6 +90,7 @@ void add_cron_script(char* home_loc, char* script_loc, char* job_timing) {
   strcat(cron_cmd, script_loc);
   strcat(cron_cmd, cmd_pt3);*/
 
+  // NOLINTNEXTLINE(concurrency-mt-unsafe, cert-env33-c)
   system(cron_cmd);
 }
 
@@ -117,5 +117,6 @@ void add_cron_speak(char* text, char* job_timing) {
   strcat(cron_speak, text);
   strcat(cron_speak, cmd_pt3);*/
 
+  // NOLINTNEXTLINE(concurrency-mt-unsafe, cert-env33-c)
   system(cron_cmd);
 }
