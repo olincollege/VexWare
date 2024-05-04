@@ -6,6 +6,8 @@
 #include <sys/wait.h>
 #include <unistd.h>
 
+void error_and_exit(const char* error_msg);
+
 /**
  * Get the file path of the home directory
  *

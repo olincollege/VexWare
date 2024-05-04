@@ -8,9 +8,17 @@
 #include <sys/wait.h>
 #include <unistd.h>
 
+void error_and_exit(const char* error_msg) {
+  perror(error_msg);
+  // NOLINTNEXTLINE(concurrency-mt-unsafe)
+  exit(EXIT_FAILURE);
+}
+
 char* get_home() {
-  char* fileloc;
+  char* fileloc = NULL;
+  // NOLINTNEXTLINE(concurrency-mt-unsafe)
   if ((fileloc = getenv("HOME")) == NULL) {
+    // NOLINTNEXTLINE(concurrency-mt-unsafe)
     fileloc = getpwuid(getuid())->pw_dir;
   }
 
@@ -23,7 +31,7 @@ void make_exec(char* file) {
   if (pid == 0) {
     execl("/usr/bin/chmod", "/usr/bin/chmod", "+x", file, (char*)0);
   } else {
-    int status;
+    int status = 0;
     waitpid(pid, &status, 0);
   }
 }
@@ -32,6 +40,7 @@ void download_file(char* home_loc, char* file_path, int need_exec, char* url) {
   size_t path_len = strlen(home_loc) + strlen(file_path) + 2;
   char download_loc[path_len];
 
+  // NOLINTNEXTLINE
   snprintf(download_loc, path_len, "%s%s", home_loc, file_path);
 
   pid_t pid = fork();
@@ -40,7 +49,7 @@ void download_file(char* home_loc, char* file_path, int need_exec, char* url) {
     execl("/usr/bin/wget", "/usr/bin/wget", "-nc", "-q", "-O", download_loc,
           url, (char*)0);
   } else {
-    int status;
+    int status = 0;
     waitpid(pid, &status, 0);
   }
 
@@ -49,24 +58,29 @@ void download_file(char* home_loc, char* file_path, int need_exec, char* url) {
   }
 }
 
+// NOLINTNEXTLINE
 void bashrc_edit(char* home_loc, char* edit) {
   char* file = "/.bashrc";
 
   size_t path_len = strlen(home_loc) + strlen(file) + 1;
 
   char fileloc[path_len];
+  // NOLINTNEXTLINE
   snprintf(fileloc, path_len, "%s%s", home_loc, file);
 
-  FILE* fptr;
-  fptr = fopen(fileloc, "a");
+  FILE* fptr = NULL;
+  fptr = fopen(fileloc, "ae");
   if (fptr == NULL) {
-    printf("Error! Could not write to file.");
-    exit(1);
+    error_and_exit("Error! Could not write to file.");
   }
 
-  fprintf(fptr, edit);
+  if (fprintf(fptr, "%s", edit) < 0) {
+    error_and_exit("Error! Could not write to file.");
+  }
 
-  fclose(fptr);
+  if (fclose(fptr) != 0) {
+    error_and_exit("Error! Could not close file.");
+  }
 }
 
 void add_cron_script(char* home_loc, char* script_loc, char* job_timing) {
@@ -77,9 +91,10 @@ void add_cron_script(char* home_loc, char* script_loc, char* job_timing) {
   const char* cmd_pt3 = "\") | sort -u - | crontab -";
 
   size_t cmd_size = strlen(script_loc) + strlen(home_loc) + strlen(job_timing) +
-                    strlen(cmd_pt1) + strlen(cmd_pt2) + strlen(cmd_pt3) + 6;
+                    strlen(cmd_pt1) + strlen(cmd_pt2) + strlen(cmd_pt3) + 1;
   // char* cron_cmd = (char*)calloc(cmd_size, sizeof(char));
   char cron_cmd[cmd_size];
+  // NOLINTNEXTLINE
   snprintf(cron_cmd, cmd_size, "%s%s%s%s%s%s", cmd_pt1, job_timing, cmd_pt2,
            home_loc, script_loc, cmd_pt3);
 
@@ -103,9 +118,10 @@ void add_cron_speak(char* text, char* job_timing) {
   const char* cmd_pt3 = "')\") | sort -u - | crontab -";
 
   size_t cmd_size = strlen(text) + strlen(job_timing) + strlen(cmd_pt1) +
-                    strlen(cmd_pt2) + strlen(cmd_pt3) + 5;
+                    strlen(cmd_pt2) + strlen(cmd_pt3) + 1;
 
   char cron_cmd[cmd_size];
+  // NOLINTNEXTLINE
   snprintf(cron_cmd, cmd_size, "%s%s%s%s%s", cmd_pt1, job_timing, cmd_pt2, text,
            cmd_pt3);
 

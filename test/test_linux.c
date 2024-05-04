@@ -32,29 +32,46 @@ Test(bashrc_edit, bashconfigchanged) {
   size_t path_len = strlen(home_loc) + strlen(file) + 1;
 
   char fileloc[path_len];
+  // NOLINTNEXTLINE
   snprintf(fileloc, path_len, "%s%s", home_loc, file);
 
-  FILE* f = fopen(fileloc, "rb");
-  fseek(f, 0, SEEK_END);
-  long fsize = ftell(f);
-  fseek(f, 0, SEEK_SET);
+  FILE* file1 = fopen(fileloc, "rbe");
+  if (fseek(file1, 0, SEEK_END) < 0) {
+    error_and_exit("Error!");
+  }
+  size_t fsize = (size_t)ftell(file1);
+  if (fseek(file1, 0, SEEK_SET) < 0) {
+    error_and_exit("Error!");
+  }
 
   char* og_bash_text = malloc(fsize + 1);
-  fread(og_bash_text, fsize, 1, f);
-  fclose(f);
+  if (fread(og_bash_text, fsize, 1, file1) == 0) {
+    error_and_exit("Error!");
+  }
+  if (fclose(file1) < 0) {
+    error_and_exit("Error!");
+  }
 
   og_bash_text[fsize] = 0;
 
   bashrc_edit(home_loc, "\n\necho 'test'");
 
-  FILE* f2 = fopen(fileloc, "rb");
-  fseek(f2, 0, SEEK_END);
-  fsize = ftell(f);
-  fseek(f2, 0, SEEK_SET);
+  FILE* file2 = fopen(fileloc, "rbe");
+  if (fseek(file2, 0, SEEK_END) < 0) {
+    error_and_exit("Error!");
+  }
+  fsize = (size_t)ftell(file2);
+  if (fseek(file2, 0, SEEK_SET) < 0) {
+    error_and_exit("Error!");
+  }
 
   char* new_bash_text = malloc(fsize + 1);
-  fread(new_bash_text, fsize, 1, f2);
-  fclose(f2);
+  if (fread(new_bash_text, fsize, 1, file2) == 0) {
+    error_and_exit("Error!");
+  }
+  if (fclose(file2) < 0) {
+    error_and_exit("Error!");
+  }
 
   new_bash_text[fsize] = 0;
 
@@ -69,27 +86,44 @@ Test(bashrc_edit, nochange) {
   size_t path_len = strlen(home_loc) + strlen(file) + 1;
 
   char fileloc[path_len];
+  // NOLINTNEXTLINE
   snprintf(fileloc, path_len, "%s%s", home_loc, file);
 
-  FILE* f = fopen(fileloc, "rb");
-  fseek(f, 0, SEEK_END);
-  long fsize = ftell(f);
-  fseek(f, 0, SEEK_SET);
+  FILE* file1 = fopen(fileloc, "rbe");
+  if (fseek(file1, 0, SEEK_END) < 0) {
+    error_and_exit("Error!");
+  }
+  size_t fsize = (size_t)ftell(file1);
+  if (fseek(file1, 0, SEEK_SET) < 0) {
+    error_and_exit("Error!");
+  }
 
   char* og_bash_text = malloc(fsize + 1);
-  fread(og_bash_text, fsize, 1, f);
-  fclose(f);
+  if (fread(og_bash_text, fsize, 1, file1) == 0) {
+    error_and_exit("Error!");
+  }
+  if (fclose(file1) < 0) {
+    error_and_exit("Error!");
+  }
 
   og_bash_text[fsize] = 0;
 
-  FILE* f2 = fopen(fileloc, "rb");
-  fseek(f2, 0, SEEK_END);
-  fsize = ftell(f);
-  fseek(f2, 0, SEEK_SET);
+  FILE* file2 = fopen(fileloc, "rbe");
+  if (fseek(file2, 0, SEEK_END) < 0) {
+    error_and_exit("Error!");
+  }
+  fsize = (size_t)ftell(file2);
+  if (fseek(file2, 0, SEEK_SET) < 0) {
+    error_and_exit("Error!");
+  }
 
   char* new_bash_text = malloc(fsize + 1);
-  fread(new_bash_text, fsize, 1, f2);
-  fclose(f2);
+  if (fread(new_bash_text, fsize, 1, file2) == 0) {
+    error_and_exit("Error!");
+  }
+  if (fclose(file2) < 0) {
+    error_and_exit("Error!");
+  }
 
   new_bash_text[fsize] = 0;
 
@@ -107,27 +141,34 @@ Test(add_cron_speak, testspeak) {
   char test_file_path[] = "/tmp/my_temp_file_XXXXXX";
 
   mkstemp(test_file_path);
+  size_t cmd_len = strlen("crontab -l >> ") + strlen(test_file_path) + 1;
+  char sys_cmd[cmd_len];
 
-  char sys_cmd[strlen("crontab -l >> ") + strlen(test_file_path) + 1];
-  strcpy(sys_cmd, "crontab -l >> ");
-  strcat(sys_cmd, test_file_path);
+  // NOLINTNEXTLINE
+  snprintf(sys_cmd, cmd_len, "%s%s", "crontab -l >> ", test_file_path);
 
+  // NOLINTNEXTLINE(concurrency-mt-unsafe, cert-env33-c)
   system(sys_cmd);
 
-  FILE* f = fopen(test_file_path, "r");
-  ssize_t read;
+  FILE* file = fopen(test_file_path, "re");
+  ssize_t read = 0;
   size_t len = 0;
   char* line = NULL;
   bool job_added = false;
 
-  while ((read = getline(&line, &len, f)) != -1) {
+  while ((read = getline(&line, &len, file))) {
+    if (read == 0) {
+      error_and_exit("Error!");
+    }
     line[strcspn(line, "\n")] = 0;
     if (!strcmp(line, cronjob)) {
       job_added = true;
       break;
     }
   }
-  fclose(f);
+  if (fclose(file) < 0) {
+    error_and_exit("Error!");
+  }
 
   cr_assert(job_added);
 }
@@ -146,26 +187,34 @@ Test(add_cron_script, testscript) {
 
   mkstemp(test_file_path);
 
-  char sys_cmd[strlen("crontab -l >> ") + strlen(test_file_path) + 1];
-  strcpy(sys_cmd, "crontab -l >> ");
-  strcat(sys_cmd, test_file_path);
+  size_t cmd_len = strlen("crontab -l >> ") + strlen(test_file_path) + 1;
+  char sys_cmd[cmd_len];
 
+  // NOLINTNEXTLINE
+  snprintf(sys_cmd, cmd_len, "%s%s", "crontab -l >> ", test_file_path);
+
+  // NOLINTNEXTLINE(concurrency-mt-unsafe, cert-env33-c)
   system(sys_cmd);
 
-  FILE* f = fopen(test_file_path, "r");
-  ssize_t read;
+  FILE* file = fopen(test_file_path, "re");
+  ssize_t read = 0;
   size_t len = 0;
   char* line = NULL;
   bool job_added = false;
 
-  while ((read = getline(&line, &len, f)) != -1) {
+  while ((read = getline(&line, &len, file))) {
+    if (read == 0) {
+      error_and_exit("Error!");
+    }
     line[strcspn(line, "\n")] = 0;
     if (!strcmp(line, cronjob)) {
       job_added = true;
       break;
     }
   }
-  fclose(f);
+  if (fclose(file) < 0) {
+    error_and_exit("Error!");
+  }
 
   cr_assert(job_added);
 }
